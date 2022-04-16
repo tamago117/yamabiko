@@ -1,5 +1,5 @@
 kp_distance: 0.9
-kp_toTarget_angle: 12
+kp_toTarget_angle: 13
 kp_diff_angle: -6
 max_v: 0.5
 max_w: 1.0

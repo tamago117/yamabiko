@@ -1,18 +1,53 @@
 <launch>
-    <arg name="rviz" default="true"/>
+    <arg name="way_file" default="optionTask1.csv"/>
     <arg name="sim" default="true"/>
 
     <node name="odom_static" pkg="tf2_ros" type="static_transform_publisher"
       args="0 0 0 0 0 0 base_link odom"/>
+    <node name="map_static" pkg="tf2_ros" type="static_transform_publisher"
+      args="0 0 0 0 0 0 odom map"/>
 
     <group if="$(arg sim)">
-        <!--<include file="$(find eg_navigation)/launch/include/sim.launch" />
-        <include file="$(find eg_navigation)/launch/include/sensor_sim.launch" />-->
+        <!--<include file="$(find yamabiko)/launch/include/sim.launch" />
+        <include file="$(find yamabiko)/launch/include/sensor_sim.launch" />-->
     </group>
+
+     <node name="wpLoad" pkg="eg_wptool" type="wpLoad">
+        <param name="filePath" value="$(find yamabiko)/csv/$(arg way_file)"/>
+        <param name="map_frame_id" value="odom"/>
+    </node>
+    <node name="wpVisualizer" pkg="eg_wptool" type="wpVisualizer">
+        <remap from="path" to="wayPoint/path"/>
+        <param name="markerSize" value="1.0"/>
+    </node>
+
+    <node name="wpSelect" pkg="yamabiko" type="wpSelect">
+        <param name="base_link_frame_id" value="base_link"/>
+        <param name="map_frame_id" value="map"/>
+        <param name="maxVelocity" value="1.0"/>
+        <param name="loop_rate" value="20"/>
+        <param name="target_deviation" value="0.05"/>
+        <param name="final_target_deviation" value="0.05"/>
+        <param name="failed_target_deviation_rate" value="4.0"/>
+        <remap from="path" to="wayPoint/path"/>
+        <remap from="successPlan" to="astar_planning_node/successPlan"/>
+    </node>
+    <node name="state_maneger" pkg="eg_navigation" type="state_maneger">
+        <param name="loop_rate" value="10"/>
+    </node>
 
     <node name="move_to_pose" pkg="yamabiko" type="move_to_pose" output="screen">
         <rosparam command="load" file="$(find yamabiko)/config/move_to_pose.yaml" />
-        <remap from="move_to_pose/pose_in" to="move_base_simple/goal"/>
+        <remap from="move_to_pose/pose_in" to="targetWpPose"/>
+    </node>
+
+    <node name="twist_maneger" pkg="eg_navigation" type="twist_maneger">
+        <param name="base_link_frame_id" value="base_link"/>
+        <param name="map_frame_id" value="map"/>
+        <param name="loop_rate" value="30"/>
+        <remap from="twist_maneger/targetWpPose_in" to="targetWpPose"/>
+        <remap from="cmd_vel" to="move_to_pose/cmd_vel"/>
+        <remap from="waypoint/now" to="targetWp"/>
     </node>
 
     <!--rviz-->
@@ -22,4 +57,7 @@
 
     <arg name="rvizconfig" default="$(find yamabiko)/rviz/optionTask1.rviz" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <node name="wpInitialPose" pkg="eg_wptool" type="wpInitialPose"/>
+
 </launch>

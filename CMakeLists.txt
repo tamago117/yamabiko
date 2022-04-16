@@ -41,3 +41,8 @@ add_executable(move_to_pose   src/move_to_pose.cpp)
 target_link_libraries(move_to_pose
   ${catkin_LIBRARIES}
 )
+
+add_executable(wpSelect   src/wpSelect.cpp)
+target_link_libraries(wpSelect
+  ${catkin_LIBRARIES}
+)
