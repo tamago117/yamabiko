@@ -137,35 +137,41 @@ int main(int argc, char** argv)
                     if(mode_array.data.at(targetWp.data) == (uint8_t)robot_status::stop){
                         break;
                     }
+                    //tempolary stop
+                    if(mode_array.data.at(targetWp.data) == (uint8_t)robot_status::column){
+                        break;
+                    }
                     targetWp.data++;
                 }
             }
 
             //angle adjust at specific wp
             //distance
-            if(not(mode_in.data==robot_status_str(robot_status::angleAdjust) and mode_in.data==robot_status_str(robot_status::stop))){
+            //if(not(mode_in.data==robot_status_str(robot_status::angleAdjust) and mode_in.data==robot_status_str(robot_status::stop))){
                 if(poseStampDistance(path.poses[targetWp.data], nowPosition.getPoseStamped()) <= fin_tar_deviation){
                     if(mode_array.data.at(targetWp.data) == (uint8_t)robot_status::column){
-                        if(stop_count > 50){
+                        if(stop_count > 60){
                             stop_count = 0;
                             mode_out.data = robot_status_str(robot_status::run);
                             mode_pub.publish(mode_out);
                             targetWp.data++;
+                        }else{
+                            stop_count++;
+
+                            mode_out.data = robot_status_str(robot_status::safety_stop);
+                            mode_pub.publish(mode_out);
                         }
-                        mode_out.data = robot_status_str(robot_status::safety_stop);
-                        mode_pub.publish(mode_out);
-                        break;
                     }else{
                         mode_out.data = robot_status_str(robot_status::angleAdjust);
                     }
                     mode_pub.publish(mode_out);
 
-                    if(!(targetWp.data >= (path.poses.size()-1))){
+                    /*if(!(targetWp.data >= (path.poses.size()-1))){
                         targetWp.data++;
-                    }
+                    }*/
 
                 }
-            }
+            //}
 
 
             tarPos.header.frame_id = path.header.frame_id;

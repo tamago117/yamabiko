@@ -46,3 +46,8 @@ add_executable(wpSelect   src/wpSelect.cpp)
 target_link_libraries(wpSelect
   ${catkin_LIBRARIES}
 )
+
+add_executable(twist_maneger   src/twist_maneger.cpp)
+target_link_libraries(twist_maneger
+  ${catkin_LIBRARIES}
+)
