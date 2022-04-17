@@ -111,11 +111,11 @@ int main(int argc, char** argv)
                 double targetAngle = atan2(dy, dx);
                 double diffAngle = arrangeAngle(targetAngle - nowPosition.getYaw());
 
-                cmd_vel.linear.x = 0;
-                cmd_vel.angular.z = diffAngle * 1.5;
-                if(abs(diffAngle) < 10*M_PI/180){
+                //cmd_vel.linear.x = 0;
+                //cmd_vel.angular.z = diffAngle * 0.5;
+                //if(abs(diffAngle) < 10*M_PI/180){
                     run_init = false;
-                }
+                //}
             }
         }
         //stop mode
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
             double diffAngle = arrangeAngle(quat2yaw(targetWpPose.pose.orientation) - nowPosition.getYaw());
 
             cmd_vel.linear.x = 0;
-            cmd_vel.angular.z = diffAngle * 1.5;
+            cmd_vel.angular.z = diffAngle * 0.5;
             if(abs(diffAngle) < 1*M_PI/180){
                 mode.data = robot_status_str(robot_status::stop);
                 angleAdjustfinish = true;
