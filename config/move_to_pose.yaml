@@ -1,9 +1,8 @@
 kp_distance: 0.9
 kp_toTarget_angle: 1.3
-#kp_diff_angle: -0.6
-kp_diff_angle: 0
-max_v: 0.1
-max_w: 0.2
+kp_diff_angle: -0.9
+max_v: 0.6
+max_w: 1.2
 finish_radius: 0.1
 rate: 50
 path_samples: 500

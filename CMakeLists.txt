@@ -51,3 +51,8 @@ add_executable(twist_maneger   src/twist_maneger.cpp)
 target_link_libraries(twist_maneger
   ${catkin_LIBRARIES}
 )
+
+add_executable(line_tracker   src/line_tracker.cpp)
+target_link_libraries(line_tracker
+  ${catkin_LIBRARIES}
+)
