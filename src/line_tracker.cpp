@@ -130,7 +130,8 @@ void line_tracker::line_GL(double x, double y, double th)
 	double w_diff = w0;
 
 	// 角速度
-	double w = w0 + (-k_eta * eta - k_phai * phai - k_w * w_diff) * 0.01;
+	//double w = w0 + (-k_eta * eta - k_phai * phai - k_w * w_diff) * 0.01;
+	double w = -(k_eta * eta  + k_phai * phai + k_w * w_diff) * 0.01;
 	if (w > w_max)
 		w = w_max;
 	else if (w < -w_max)

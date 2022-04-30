@@ -1,0 +1,8 @@
+target_x : 2.0
+target_y : 0.0
+target_theta : -0.785
+k_eta : 22
+k_phai : 30
+k_w : 0
+v_max : 0.5
+w_max : 1.0

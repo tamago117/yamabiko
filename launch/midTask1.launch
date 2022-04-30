@@ -1,0 +1,44 @@
+<launch>
+    <arg name="sim" default="true"/>
+
+    <!--<node name="odom_static" pkg="tf2_ros" type="static_transform_publisher"
+      args="0 0 0 0 0 0 base_link odom"/>-->
+    <node name="map_static" pkg="tf2_ros" type="static_transform_publisher"
+      args="0 0 0 0 0 0 odom map"/>
+
+    <group if="$(arg sim)">
+        <include file="$(find beego_gazebo)/launch/empty_world.launch" >
+            <arg name="rviz" value="false"/>
+        </include>
+    </group>
+    <group unless="$(arg sim)">
+        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge"/>
+    </group>
+
+    <node name="line_tracker" pkg="yamabiko" type="line_tracker" output="screen">
+        <remap from="line_tracker/odom_in" to="diff_drive_controller/odom"/>
+        <rosparam command="load" file="$(find yamabiko)/config/line_tracker.yaml" />
+    </node>
+
+    <node name="twist_maneger" pkg="yamabiko" type="twist_maneger">
+        <param name="base_link_frame_id" value="base_link"/>
+        <param name="map_frame_id" value="map"/>
+        <param name="loop_rate" value="30"/>
+        <remap from="twist_maneger/targetWpPose_in" to="targetWpPose"/>
+        <remap from="cmd_vel" to="line_tracker/cmd_vel"/>
+        <remap from="waypoint/now" to="targetWp"/>
+        <remap from="twist_maneger/cmd_vel" to="/diff_drive_controller/cmd_vel"/>
+    </node>
+
+
+    <!--rviz-->
+    <include file="$(find yamabiko)/launch/include/model_show.launch" >
+        <arg name="include" value="true"/>
+    </include>
+
+    <arg name="rvizconfig" default="$(find yamabiko)/rviz/midTask1.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <node name="wpInitialPose" pkg="eg_wptool" type="wpInitialPose"/>
+
+</launch>
