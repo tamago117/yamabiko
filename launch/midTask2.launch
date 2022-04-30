@@ -1,0 +1,38 @@
+<launch>
+    <arg name="way_file" default="optionTask1.csv"/>
+    <arg name="sim" default="true"/>
+
+    <!--<node name="odom_static" pkg="tf2_ros" type="static_transform_publisher"
+      args="0 0 0 0 0 0 base_link odom"/>-->
+    <node name="map_static" pkg="tf2_ros" type="static_transform_publisher"
+      args="0 0 0 0 0 0 odom map"/>
+
+    <group if="$(arg sim)">
+        <include file="$(find beego_gazebo)/launch/empty_world.launch" >
+            <arg name="rviz" value="false"/>
+            <arg name="world_name" default="$(find yamabiko)/worlds/poll_pass.world"/>
+        </include>
+    </group>
+    <group unless="$(arg sim)">
+        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge"/>
+    </group>
+
+     
+
+
+    <!--rviz-->
+    <include file="$(find yamabiko)/launch/include/model_show.launch" >
+        <arg name="include" value="true"/>
+    </include>
+
+    <!-- obstacle detector -->
+    <rosparam command="load" file="$(find yamabiko)/config/obstacle_detector.yaml" />
+    <node name="obstacle_extractor" pkg="obstacle_detector" type="obstacle_extractor_node"/>
+    <node name="obstacle_tracker" pkg="obstacle_detector" type="obstacle_tracker_node" />
+
+    <arg name="rvizconfig" default="$(find yamabiko)/rviz/midTask2.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <node name="wpInitialPose" pkg="eg_wptool" type="wpInitialPose"/>
+
+</launch>

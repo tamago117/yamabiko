@@ -1,0 +1,6 @@
+obstacle_extractor:
+  use_scan: true
+  use_pcl: false
+  min_group_points: 10
+  max_group_distance: 0.05
+  max_circle_radius : 0.5
