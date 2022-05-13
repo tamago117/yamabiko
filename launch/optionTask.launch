@@ -13,7 +13,9 @@
         </include>
     </group>
     <group unless="$(arg sim)">
-        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge"/>
+        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge">
+            <remap from="cmd_vel" to="diff_drive_controller/cmd_vel"/>
+        </node>
     </group>
 
      <node name="wpLoad" pkg="eg_wptool" type="wpLoad">
@@ -30,7 +32,7 @@
         <param name="map_frame_id" value="map"/>
         <param name="maxVelocity" value="1.0"/>
         <param name="loop_rate" value="20"/>
-        <param name="target_deviation" value="0.05"/>
+        <param name="target_deviation" value="0.15"/>
         <param name="final_target_deviation" value="0.05"/>
         <param name="failed_target_deviation_rate" value="4.0"/>
         <remap from="path" to="wayPoint/path"/>
@@ -49,7 +51,7 @@
         <remap from="twist_maneger/targetWpPose_in" to="targetWpPose"/>
         <remap from="cmd_vel" to="move_to_pose/cmd_vel"/>
         <remap from="waypoint/now" to="targetWp"/>
-        <remap from="twist_maneger/cmd_vel" to="/diff_drive_controller/cmd_vel"/>
+        <remap from="twist_maneger/cmd_vel" to="diff_drive_controller/cmd_vel"/>
     </node>
 
 
