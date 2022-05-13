@@ -111,6 +111,8 @@ geometry_msgs::Twist move_to_pose::move(const geometry_msgs::PoseStamped& curren
     double toTarget_yawVel = toTarget_angle_pid.update(alpha, 0, 1/(double)rate);
     double diff_angle_yawVel = diff_angle_pid.update(beta, 0, 1/(double)rate);
 
+    //std::cout << toTarget_yawVel << diff_angle_yawVel << std::endl;
+
     cmd_vel.linear.x = distance_pid.update(distance, 0, 1/(double)rate);
     cmd_vel.angular.z = toTarget_yawVel + diff_angle_yawVel;
 
