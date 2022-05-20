@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  obstacle_detector
   tf
 )
 
@@ -22,7 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES yamabiko
-  CATKIN_DEPENDS roscpp rospy std_msgs tf
+  CATKIN_DEPENDS roscpp rospy std_msgs obstacle_detector tf
   DEPENDS system_lib
 )
 
@@ -54,5 +55,10 @@ target_link_libraries(twist_maneger
 
 add_executable(line_tracker   src/line_tracker.cpp)
 target_link_libraries(line_tracker
+  ${catkin_LIBRARIES}
+)
+
+add_executable(person_tracking   src/person_tracking.cpp)
+target_link_libraries(person_tracking
   ${catkin_LIBRARIES}
 )

@@ -124,6 +124,10 @@ geometry_msgs::Twist move_to_pose::move(const geometry_msgs::PoseStamped& curren
     cmd_vel.linear.x = std::clamp(cmd_vel.linear.x, -MAX_V, MAX_V);
     cmd_vel.angular.z = std::clamp(cmd_vel.angular.z, -MAX_W, MAX_W);
 
+    //finish
+    if(distance < FINISH_RADIUS){
+        cmd_vel.angular.z = 0;
+    }
 
     return cmd_vel;
 }
