@@ -14,7 +14,18 @@
         </include>
     </group>
     <group unless="$(arg sim)">
-        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge"/>
+        <node name="ypspur_ros_bridge" pkg="ypspur_ros_bridge" type="ypspur_ros_bridge">
+            <remap from="cmd_vel" to="diff_drive_controller/cmd_vel"/>
+        </node>
+        <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+            <!-- Starts up faster, but timestamps will be inaccurate. --> 
+            <param name="calibrate_time" type="bool" value="false"/> 
+            <!-- Set the port to connect to here -->
+            <param name="port" type="string" value="/dev/ttyACM0"/> 
+            <param name="intensity" type="bool" value="false"/>
+            <param name="frameid" value="hokuyo_link"/>
+        </node>
+        
     </group>
 
     <!-- obstacle detector -->
@@ -22,7 +33,7 @@
     <node name="obstacle_extractor" pkg="obstacle_detector" type="obstacle_extractor_node"/>
     <node name="obstacle_tracker" pkg="obstacle_detector" type="obstacle_tracker_node" />
 
-    <node name="person_tracking" pkg="yamabiko" type="person_tracking" output="screen">
+    <node name="person_tracking" pkg="yamabiko" type="person_tracking" >
         <param name = "track_radius" value="0.5"/>
     </node>
 

@@ -19,5 +19,17 @@
       <static>true</static>
       <pose>2 -0.4 0 0 0 0</pose>
     </include>
+    <include>
+      <name>poll3</name>
+      <uri>model://poll</uri>
+      <static>true</static>
+      <pose>1 -1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <name>poll4</name>
+      <uri>model://poll</uri>
+      <static>true</static>
+      <pose>1 1.4 0 0 0 0</pose>
+    </include>
   </world>
 </sdf>
