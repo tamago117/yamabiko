@@ -43,12 +43,12 @@ void PID::set(double kp_, double ki_, double kd_)
 double PID::update(double local_val, double target_val, double dt)
 {
     res_p = local_val - target_val;
-    //res_i = res_i + (res_p*dt);
+    res_i = res_i + (res_p*dt);
     res_d = (res_p-res_prep)/dt;
 
     res_prep = res_p;
 
-    //result_value = kp*res_p + ki*res_i + kd*res_d;
+    result_value = kp*res_p + ki*res_i + kd*res_d;
     result_value = kp*res_p + kd*res_d;
     return result_value;
 }
