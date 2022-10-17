@@ -49,7 +49,7 @@ double PID::update(double local_val, double target_val, double dt)
     res_prep = res_p;
 
     result_value = kp*res_p + ki*res_i + kd*res_d;
-    result_value = kp*res_p + kd*res_d;
+    //result_value = kp*res_p + kd*res_d;
     return result_value;
 }
 
